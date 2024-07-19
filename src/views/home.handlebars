@@ -1,0 +1,13 @@
+<h1>Tamales Gallo - Productos</h1>
+
+<div class="productsContainer">
+  {{#each products}}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{this.title}}</h5>
+        <p class="card-text small">{{this.description}}</p>
+        <p class="card-text">${{this.price}}</p>
+      </div>
+    </div>
+  {{/each}}
+</div>
