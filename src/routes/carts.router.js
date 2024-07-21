@@ -2,7 +2,7 @@ import express from "express";
 import CartManager from "../dao/db/cart-manager-db.js";
 
 const router = express.Router();
-const cartManager = new CartManager("./src/data/carts.json");
+const cartManager = new CartManager();
 
 router.post("/", async (req, res) => {
   try {
