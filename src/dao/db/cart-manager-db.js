@@ -28,7 +28,7 @@ class CartManager {
 
   async addProductToCart(cartId, productId, quantity = 1) {
     try {
-      const cart = await this.getCartById(cartId);
+      const cart = await CartModel.findById(cartId);
       const existingProduct = cart.products.find(
         (p) => p.product.toString() === productId
       );
@@ -42,6 +42,64 @@ class CartManager {
       return cart;
     } catch (error) {
       console.error("Error adding product to the cart", error);
+      throw error;
+    }
+  }
+
+  async removeProductFromCart(cartId, productId) {
+    try {
+      const cart = await this.getCartById(cartId);
+      cart.products = cart.products.filter(
+        (p) => p.product.toString() !== productId
+      );
+      cart.markModified("products");
+      await cart.save();
+      return cart;
+    } catch (error) {
+      console.error("Error removing product from the cart", error);
+      throw error;
+    }
+  }
+
+  async updateCart(cartId, updatedProducts) {
+    try {
+      const cart = await this.getCartById(cartId);
+      cart.products = updatedProducts;
+      cart.markModified("products");
+      await cart.save();
+      return cart;
+    } catch (error) {
+      console.error("Error updating the cart", error);
+      throw error;
+    }
+  }
+
+  async updateProductQuantity(cartId, productId, newQuantity) {
+    try {
+      const cart = await this.getCartById(cartId);
+      const existingProduct = cart.products.find(
+        (p) => p.product.toString() === productId
+      );
+      if (existingProduct) {
+        existingProduct.quantity = newQuantity;
+      }
+      cart.markModified("products");
+      await cart.save();
+      return cart;
+    } catch (error) {
+      console.error("Error updating product quantity in the cart", error);
+      throw error;
+    }
+  }
+
+  async clearCart(cartId) {
+    try {
+      const cart = await this.getCartById(cartId);
+      cart.products = [];
+      cart.markModified("products");
+      await cart.save();
+    } catch (error) {
+      console.error("Error clearing the cart", error);
       throw error;
     }
   }
